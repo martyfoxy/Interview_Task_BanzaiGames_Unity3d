@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 1670742430}
   - component: {fileID: 1670742429}
   m_Layer: 0
-  m_Name: Game Manager
+  m_Name: Bootstrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -322,9 +322,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1670742428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: def1209e8d1b76446a7c80fdce1ee57b, type: 3}
+  m_Script: {fileID: 11500000, guid: bcc05d4e042c4a54bbbc71884df3fc97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Managers:
+  - {fileID: 11400000, guid: 6dfe6778f260a214f8b923a529b53381, type: 2}
+  - {fileID: 11400000, guid: 5cad44d21abedc4458be0847585c805e, type: 2}
+  - {fileID: 11400000, guid: d7d6950f3dbd5c04e8c36487a91aacc9, type: 2}
+  - {fileID: 11400000, guid: 2ca71028bf414704cb71e5eb8d0dfa03, type: 2}
 --- !u!4 &1670742430
 Transform:
   m_ObjectHideFlags: 0

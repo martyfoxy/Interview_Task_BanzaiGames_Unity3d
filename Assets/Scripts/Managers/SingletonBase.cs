@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
@@ -38,6 +33,8 @@ namespace Assets.Scripts.Managers
                         var go = new GameObject();
                         _instance = go.AddComponent<T>();
                         go.name = typeof(T).ToString() + "(Singleton)";
+
+                        Debug.Log("Синглтон класса " + typeof(T).ToString() + " создан!");
 
                         //При смене сцены не удаляем экземпляр
                         DontDestroyOnLoad(go);

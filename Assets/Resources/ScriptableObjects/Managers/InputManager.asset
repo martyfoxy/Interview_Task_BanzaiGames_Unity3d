@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 201a6c249c82a684e8e52baa1297854c, type: 3}
+  m_Name: InputManager
+  m_EditorClassIdentifier: 
+  HorizontalInput:
+    IsConstant: 0
+    ConstValue: 0
+    Variable: {fileID: 11400000, guid: 8b5e6ee92628ca44da2ce450814caf85, type: 2}
+  VerticalInput:
+    IsConstant: 0
+    ConstValue: 0
+    Variable: {fileID: 11400000, guid: 09a918b191724e64ab1ee82fdf75cb52, type: 2}
+  FireEvent: {fileID: 11400000, guid: bbf85cc1a3eb2734a88531aaeed7ac19, type: 2}
+  NextWeaponEvent: {fileID: 0}
+  PreviousWeaponEvent: {fileID: 0}
