@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
-namespace Assets.Scripts.Enemy
+namespace Assets.Scripts.Managers
 {
     /// <summary>
-    /// Класс для логики противника
+    /// Класс менеджера для обработки ввода
     /// </summary>
-    public class Enemy : MonoBehaviour
+    public class InputManager : SingletonBase<InputManager>
     {
+
     }
 }
