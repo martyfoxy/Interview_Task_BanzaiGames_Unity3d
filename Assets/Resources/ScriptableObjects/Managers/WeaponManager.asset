@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87013cdd3f2cb304fa50757e06b321a6, type: 3}
+  m_Name: WeaponManager
+  m_EditorClassIdentifier: 
+  BulletCount:
+    IsConstant: 1
+    ConstValue: 10
+    Variable: {fileID: 0}
+  WeaponChangedEvent: {fileID: 11400000, guid: a98e269e78c178745881a9d346581ab6, type: 2}
+  NextWeaponButtonEvent: {fileID: 11400000, guid: 0471d97dd90c5164391e39ec69e06c25,
+    type: 2}
+  PreviosWeaponButtonEvent: {fileID: 11400000, guid: 7e983e116424c6b4182a85bbdc554873,
+    type: 2}

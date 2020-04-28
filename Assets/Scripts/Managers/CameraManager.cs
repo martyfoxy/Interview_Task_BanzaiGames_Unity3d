@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Interface;
+using Assets.Scripts.ScriptableObjects;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -7,8 +8,18 @@ namespace Assets.Scripts.Managers
     /// Класс менеджера камеры
     /// </summary>
     [CreateAssetMenu(fileName = "Camera Manager", menuName = "Game Manager/Camera Manager")]
-    public class CameraManager : BaseManager, IAwake, IUpdate
+    public class CameraManager : BaseManager, IAwake, IFixedUpdate
     {
+        [Header("Параметры")]
+        [Tooltip("Скорость перемещения камеры")]
+        public float CameraSpeed;
+        [Tooltip("Отступ камеры от танка")]
+        public Vector3 CameraOffset;
+
+        [Header("Ссылки на объекты событий")]
+        [Tooltip("Ссылки на объект с событием создания игрока")]
+        public GameEventScriptableObject PlayerSpawnedEvent;
+
         private Camera _camera;
         private Transform _target;
 
@@ -17,21 +28,31 @@ namespace Assets.Scripts.Managers
             UpdateManager.Register(this);
 
             _camera = Camera.main;
+
+            PlayerSpawnedEvent.OnGameEvent += FollowCamera;
         }
 
-        public void OnUpdate()
+        public void OnFixedUpdate()
         {
-            
+            if (_target != null)
+            {
+                Vector3 desiredPos = Quaternion.AngleAxis(_target.rotation.eulerAngles.y, Vector3.up) * CameraOffset;
+
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, _target.position + desiredPos, Time.fixedDeltaTime * CameraSpeed);
+                _camera.transform.LookAt(_target.position);
+            }
         }
 
-        public void FollowCamera(Transform target)
+        private void OnDisable()
         {
-            _target = target;
+            PlayerSpawnedEvent.OnGameEvent -= FollowCamera;
         }
 
-        public void UnFollowCamera()
+        public void FollowCamera()
         {
-            _target = null;
+            _target = ManagerContainer.Get<SpawnManager>().TankReference.transform;
         }
+
+
     }
 }

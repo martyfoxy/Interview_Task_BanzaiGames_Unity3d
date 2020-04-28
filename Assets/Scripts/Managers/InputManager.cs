@@ -20,12 +20,12 @@ namespace Assets.Scripts.Managers
         [Space(10)]
 
         [Header("Ссылки на объекты с событиями ввода")]
-        [Tooltip("Переменная на событие нажатия кнопки выстрела")]
-        public GameEventScriptableObject FireEvent;
-        [Tooltip("Переменная на событие нажатия кнопки следующего оружия")]
-        public GameEventScriptableObject NextWeaponEvent;
-        [Tooltip("Переменная на событие нажатия кнопки предыдущего оружия ")]
-        public GameEventScriptableObject PreviousWeaponEvent;
+        [Tooltip("Ссылка на событие нажатия кнопки выстрела")]
+        public GameEventScriptableObject FireEventButton;
+        [Tooltip("Ссылка на событие нажатия кнопки следующего оружия")]
+        public GameEventScriptableObject NextWeaponButtonEvent;
+        [Tooltip("Ссылка на событие нажатия кнопки предыдущего оружия ")]
+        public GameEventScriptableObject PreviousWeaponButtonEvent;
 
         public void OnAwake()
         {
@@ -47,11 +47,11 @@ namespace Assets.Scripts.Managers
 
             //Нужно делать проверку, чтобы события не вызывались одновременно
             if (fireInput)
-                FireEvent.Invoke();
+                FireEventButton.Invoke();
             else if (nextInput)
-                NextWeaponEvent.Invoke();
+                NextWeaponButtonEvent.Invoke();
             else if (previousInput)
-                PreviousWeaponEvent.Invoke();
+                PreviousWeaponButtonEvent.Invoke();
         }
     }
 }

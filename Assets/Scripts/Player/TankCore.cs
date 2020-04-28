@@ -19,10 +19,10 @@ namespace Assets.Scripts.Player
         private TankScriptableObject _tankDescription;
 
         //Ссылки на колеса танка
-        [SerializeField]
+        /*[SerializeField]
         private GameObject[] _rightWheels;
         [SerializeField]
-        private GameObject[] _leftWheels;
+        private GameObject[] _leftWheels;*/
 
         //Ссылки на компоненты танка
         private Rigidbody _rigidBody;

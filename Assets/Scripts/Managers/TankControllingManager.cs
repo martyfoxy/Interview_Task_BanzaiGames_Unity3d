@@ -42,18 +42,24 @@ namespace Assets.Scripts.Managers
             PlayerSpawned.OnGameEvent += PlayerSpawnedHandler;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             //Отписываемся от событий после уничтожения
             FireButtonPressed.OnGameEvent -= FireButtonPressedHandler;
         }
 
+        /// <summary>
+        /// Обработчик события создания танка
+        /// </summary>
         private void PlayerSpawnedHandler()
         {
             //Изначально мы находимся в состоянии покоя
             ChangeState(new IdleState(this));
         }
 
+        /// <summary>
+        /// Обработчик нажатия на кнопку выстрел
+        /// </summary>
         private void FireButtonPressedHandler()
         {
             (CurrentState as TankState).Fire();        

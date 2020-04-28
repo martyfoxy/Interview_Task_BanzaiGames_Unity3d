@@ -25,9 +25,17 @@ namespace Assets.Scripts
 
         private void Start()
         {
+            InitGame();
+        }
+
+        /// <summary>
+        /// Метод запуска игры
+        /// </summary>
+        public void InitGame()
+        {
             var spawnMng = ManagerContainer.Get<SpawnManager>();
 
-            spawnMng.SpawnTestTank();
+            spawnMng.SpawnAnyTank();
         }
     }
 }

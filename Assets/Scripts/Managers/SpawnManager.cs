@@ -40,16 +40,21 @@ namespace Assets.Scripts.Managers
             _tanksData.AddRange(Resources.LoadAll<TankScriptableObject>("ScriptableObjects/Tanks").ToList());
         }
 
-        public void SpawnTestTank()
+        /// <summary>
+        /// Тестовый метод. Создает на сцене танк со случайным описанием
+        /// </summary>
+        public void SpawnAnyTank()
         {
-            SpawnPlayerTank(_tanksData[0]);
+            var randomDesc = _tanksData[Random.Range(0, _tanksData.Count - 1)];
+
+            SpawnPlayerTank(randomDesc);
         }
 
         /// <summary>
         /// Создать на сцене танк согласно описанию
         /// </summary>
         /// <param name="description">Скриптовый объект с описанием</param>
-        public void SpawnPlayerTank(TankScriptableObject description)
+        public TankCore SpawnPlayerTank(TankScriptableObject description)
         {
             var descriptionInstance = Instantiate(description);
 
@@ -60,21 +65,25 @@ namespace Assets.Scripts.Managers
             _tankReference = tankCore;
 
             PlayerSpawnedEvent.Invoke();
+
+            return tankCore;
         }
 
         /// <summary>
         /// Создать на сцене противника согласно описанию
         /// </summary>
         /// <param name="description">Скриптовый объект с описанием</param>
-        public void SpawnEnemy(EnemyScriptableObject description)
+        public EnemyCore SpawnEnemy(EnemyScriptableObject description)
         {
             var descriptionInstance = Instantiate(description);
 
             var go = Instantiate(description.UsedPrefab, new Vector3(), Quaternion.identity) as GameObject;
-            var enemyScript = go.GetComponent<EnemyCore>();
-            enemyScript.SetDescription(descriptionInstance);
+            var enemyCore = go.GetComponent<EnemyCore>();
+            enemyCore.SetDescription(descriptionInstance);
 
-            _enemyReferences.Add(enemyScript);
+            _enemyReferences.Add(enemyCore);
+
+            return enemyCore;
         }
     }
 }

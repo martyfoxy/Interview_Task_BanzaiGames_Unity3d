@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 201a6c249c82a684e8e52baa1297854c, type: 3}
-  m_Name: InputManager
+  m_Script: {fileID: 11500000, guid: b6f7e9e535d676444b6206027534cc80, type: 3}
+  m_Name: TankControllingManager
   m_EditorClassIdentifier: 
   HorizontalInput:
     IsConstant: 0
@@ -20,8 +20,9 @@ MonoBehaviour:
     IsConstant: 0
     ConstValue: 0
     Variable: {fileID: 11400000, guid: 09a918b191724e64ab1ee82fdf75cb52, type: 2}
-  FireEventButton: {fileID: 11400000, guid: bbf85cc1a3eb2734a88531aaeed7ac19, type: 2}
-  NextWeaponButtonEvent: {fileID: 11400000, guid: 0471d97dd90c5164391e39ec69e06c25,
+  FireButtonPressed: {fileID: 11400000, guid: bbf85cc1a3eb2734a88531aaeed7ac19, type: 2}
+  NextWeaponButtonPressed: {fileID: 11400000, guid: 0471d97dd90c5164391e39ec69e06c25,
     type: 2}
-  PreviousWeaponButtonEvent: {fileID: 11400000, guid: 7e983e116424c6b4182a85bbdc554873,
+  PreviousButtonPressed: {fileID: 11400000, guid: 7e983e116424c6b4182a85bbdc554873,
     type: 2}
+  PlayerSpawned: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}
