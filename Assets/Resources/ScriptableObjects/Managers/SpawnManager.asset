@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de481dfb6e15c4d4bb23f4dee7dd17df, type: 3}
   m_Name: SpawnManager
   m_EditorClassIdentifier: 
+  PlayerSpawnedEvent: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}

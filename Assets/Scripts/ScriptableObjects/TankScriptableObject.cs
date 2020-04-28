@@ -8,20 +8,25 @@ namespace Assets.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "NewTankDescription", menuName = "Game Data/New Tank", order = 0)]
     public class TankScriptableObject : ScriptableObject
     {
+        [Tooltip("Используемый префаб танка")]
         [SerializeField]
         private GameObject usedPrefab;
 
+        [Tooltip("Имя танка")]
         [SerializeField]
         private string tankName;
 
+        [Tooltip("Начальное здоровье танка")]
         [SerializeField]
         [Range(100, 200)]
         private int health;
 
+        [Tooltip("Уровень защиты")]
         [SerializeField]
         [Range(0f, 1f)]
         private float defence;
 
+        [Tooltip("Скорость перемещения")]
         [SerializeField]
         [Range(1f, 10f)]
         private float speed;

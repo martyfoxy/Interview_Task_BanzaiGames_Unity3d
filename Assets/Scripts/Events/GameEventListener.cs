@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.ScriptableObjects;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Assets.Scripts.Events
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Events
     /// </summary>
     public class GameEventListener : MonoBehaviour
     {
-        [Tooltip("Игровое событие, на которое нужно подписаться")]
+        [Tooltip("Ссылка на объект игрового события")]
         public GameEventScriptableObject Event;
 
         [Tooltip("Обработчик события")]

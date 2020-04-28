@@ -1,6 +1,6 @@
-﻿using Assets.Scripts.Events;
-using Assets.Scripts.Interface;
-using Assets.Scripts.Variables;
+﻿using Assets.Scripts.Interface;
+using Assets.Scripts.ScriptableObjects;
+using Assets.Scripts.ScriptableObjects.Variables;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -11,11 +11,20 @@ namespace Assets.Scripts.Managers
     [CreateAssetMenu(fileName = "InputManager", menuName = "Game Manager/Input Manager", order = 2)]
     public class InputManager : BaseManager, IAwake, IUpdate
     {
-        //Ссылки на скриптовые объекты переменных и событий
+        [Header("Ссылки на объекты с переменными ввода")]
+        [Tooltip("Переменная для ввода стрелками влево-вправо")]
         public FloatReference HorizontalInput;
+        [Tooltip("Переменная для ввода стрелками вперед-назад")]
         public FloatReference VerticalInput;
+
+        [Space(10)]
+
+        [Header("Ссылки на объекты с событиями ввода")]
+        [Tooltip("Переменная на событие нажатия кнопки выстрела")]
         public GameEventScriptableObject FireEvent;
+        [Tooltip("Переменная на событие нажатия кнопки следующего оружия")]
         public GameEventScriptableObject NextWeaponEvent;
+        [Tooltip("Переменная на событие нажатия кнопки предыдущего оружия ")]
         public GameEventScriptableObject PreviousWeaponEvent;
 
         public void OnAwake()
@@ -26,11 +35,11 @@ namespace Assets.Scripts.Managers
         public void OnUpdate()
         {
             //Считываем данные с устройств ввода
-            var horInput = Input.GetAxis("Horizontal");
-            var vertInput = Input.GetAxis("Vertical");
-            var fireInput = Input.GetButtonDown("Fire");
-            var nextInput = Input.GetButtonDown("NextWeapon");
-            var previousInput = Input.GetButtonDown("PreviousWeapon");
+            float horInput = Input.GetAxis("Horizontal");
+            float vertInput = Input.GetAxis("Vertical");
+            bool fireInput = Input.GetButtonDown("Fire");
+            bool nextInput = Input.GetButtonDown("NextWeapon");
+            bool previousInput = Input.GetButtonDown("PreviousWeapon");
 
             //Задаем переменные и вызываем события
             HorizontalInput.Variable.SetValue(horInput);

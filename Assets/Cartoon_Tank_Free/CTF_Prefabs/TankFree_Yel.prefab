@@ -208,6 +208,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f646aec7b9b7b54e8006f7749c2153a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentHealthVariable:
+    IsConstant: 0
+    ConstValue: 0
+    Variable: {fileID: 11400000, guid: 4cf9002d62eab994d838370be71ed011, type: 2}
+  FirePressed: {fileID: 0}
+  _rightWheels: []
+  _leftWheels: []
 --- !u!1 &1641193759526630708
 GameObject:
   m_ObjectHideFlags: 0

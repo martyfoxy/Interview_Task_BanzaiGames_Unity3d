@@ -8,6 +8,11 @@ namespace Assets.Scripts.Enemy
     /// </summary>
     public class EnemyCore : MonoBehaviour
     {
-        public EnemyScriptableObject EnemyDescription;
+        private EnemyScriptableObject _enemyDescription;
+
+        public void SetDescription(EnemyScriptableObject enemyDesc)
+        {
+            _enemyDescription = enemyDesc;
+        }
     }
 }

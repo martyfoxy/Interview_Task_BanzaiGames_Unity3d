@@ -22,5 +22,12 @@ namespace Assets.Scripts
                 ManagerContainer.AddManager(manager);
             });
         }
+
+        private void Start()
+        {
+            var spawnMng = ManagerContainer.Get<SpawnManager>();
+
+            spawnMng.SpawnTestTank();
+        }
     }
 }

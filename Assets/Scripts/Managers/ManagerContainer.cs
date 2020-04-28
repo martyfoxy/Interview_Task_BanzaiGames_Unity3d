@@ -1,7 +1,6 @@
 ﻿using Assets.Scripts.Interface;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
@@ -24,13 +23,9 @@ namespace Assets.Scripts.Managers
 
             Instance._managers.Add(managerInstance.GetType(), managerInstance);
 
-            Debug.Log("Менеджер " + managerInstance.ToString() + " добавлен в контейнер менеджеров");
-
             //Вызываем Awake у добавленного менеджера
             if(managerInstance is IAwake)
-            {
                 (managerInstance as IAwake).OnAwake();
-            }
         }
 
         /// <summary>

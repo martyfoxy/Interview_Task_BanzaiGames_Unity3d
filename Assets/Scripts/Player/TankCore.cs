@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using Assets.Scripts.ScriptableObjects;
+using Assets.Scripts.Events;
+using Assets.Scripts.ScriptableObjects.Variables;
 
 namespace Assets.Scripts.Player
 {
@@ -15,7 +12,11 @@ namespace Assets.Scripts.Player
     [RequireComponent(typeof(Rigidbody))]
     public class TankCore : MonoBehaviour
     {
-        public TankScriptableObject TankDescription;
+        [Tooltip("Ссылка на переменную хранящую текущее здоровье")]
+        public IntReference CurrentHealthVariable;
+
+        //Используемый объект описания танка
+        private TankScriptableObject _tankDescription;
 
         //Ссылки на колеса танка
         [SerializeField]
@@ -23,11 +24,9 @@ namespace Assets.Scripts.Player
         [SerializeField]
         private GameObject[] _leftWheels;
 
+        //Ссылки на компоненты танка
         private Rigidbody _rigidBody;
         private BoxCollider _boxCollider;
-
-        private float _horInput;
-        private float _vertInput;
 
         private void Awake()
         {
@@ -35,30 +34,44 @@ namespace Assets.Scripts.Player
             _boxCollider = GetComponent<BoxCollider>();
         }
 
-        private void Update()
+        /// <summary>
+        /// Задать объект описания танка
+        /// </summary>
+        public void SetDescription(TankScriptableObject tankDesc)
         {
-            _horInput = Input.GetAxis("Horizontal");
-            _vertInput = Input.GetAxis("Vertical");
+            _tankDescription = tankDesc;
+
+            CurrentHealthVariable.Variable.SetValue(_tankDescription.Health);
         }
 
-        private void FixedUpdate()
+        /// <summary>
+        /// Передвинуть танк в направлении заданном вводом
+        /// </summary>
+        /// <param name="vertInputValue">Значение ввода</param>
+        public void MoveTank(float vertInputValue)
         {
-            MoveTank();
-            RotateTank();
-        }
-
-        private void MoveTank()
-        {
-            Vector3 movementVector = transform.forward * TankDescription.Speed *_vertInput * Time.fixedDeltaTime;
+            Vector3 movementVector = transform.forward * _tankDescription.Speed * vertInputValue * Time.fixedDeltaTime;
 
             _rigidBody.MovePosition(_rigidBody.position + movementVector);
         }
 
-        private void RotateTank()
+        /// <summary>
+        /// Повернуть танк в направлении заданном вводом
+        /// </summary>
+        /// <param name="horInputValue"></param>
+        public void RotateTank(float horInputValue)
         {
-            Quaternion rotationQuat = Quaternion.Euler(0f, _horInput * 45f * Time.fixedDeltaTime, 0f);
+            Quaternion rotationQuat = Quaternion.Euler(0f, horInputValue * 45f * Time.fixedDeltaTime, 0f);
 
             _rigidBody.MoveRotation(_rigidBody.rotation * rotationQuat);
+        }
+
+        /// <summary>
+        /// Выстрелить
+        /// </summary>
+        public void Fire()
+        {
+            Debug.Log("FIRE");
         }
     }
 }

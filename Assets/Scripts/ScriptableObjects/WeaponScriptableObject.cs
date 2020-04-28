@@ -8,9 +8,11 @@ namespace Assets.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "NewWeaponDescription", menuName = "Game Data/New Weapon", order = 1)]
     public class WeaponScriptableObject : ScriptableObject
     {
+        [Tooltip("Имя оружия")]
         [SerializeField]
         private string weaponName;
 
+        [Tooltip("Наносимый урон")]
         [SerializeField]
         [Range(10, 50)]
         private int damage;
@@ -19,13 +21,16 @@ namespace Assets.Scripts.ScriptableObjects
         [Range(1f, 5f)]
         private float hitRange;*/
 
+        [Tooltip("Задержка после выстрела")]
         [SerializeField]
         [Range(0f, 3f)]
         private float fireDelay;
 
+        [Tooltip("Тип оружия")]
         [SerializeField]
         private WeaponTypeEnum weaponType;
 
+        [Tooltip("Отдача")]
         [SerializeField]
         [Range(0f, 1f)]
         private float recoil;
