@@ -52,7 +52,5 @@ namespace Assets.Scripts.Managers
         {
             _target = ManagerContainer.Get<SpawnManager>().TankReference.transform;
         }
-
-
     }
 }

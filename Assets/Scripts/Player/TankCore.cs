@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Assets.Scripts.ScriptableObjects;
-using Assets.Scripts.Events;
 using Assets.Scripts.ScriptableObjects.Variables;
 
 namespace Assets.Scripts.Player
@@ -19,10 +18,10 @@ namespace Assets.Scripts.Player
         private TankScriptableObject _tankDescription;
 
         //Ссылки на колеса танка
-        /*[SerializeField]
+        [SerializeField]
         private GameObject[] _rightWheels;
         [SerializeField]
-        private GameObject[] _leftWheels;*/
+        private GameObject[] _leftWheels;
 
         //Ссылки на компоненты танка
         private Rigidbody _rigidBody;
@@ -35,7 +34,7 @@ namespace Assets.Scripts.Player
         }
 
         /// <summary>
-        /// Задать объект описания танка
+        /// Задать описание танка
         /// </summary>
         public void SetDescription(TankScriptableObject tankDesc)
         {
@@ -53,6 +52,18 @@ namespace Assets.Scripts.Player
             Vector3 movementVector = transform.forward * _tankDescription.Speed * vertInputValue * Time.fixedDeltaTime;
 
             _rigidBody.MovePosition(_rigidBody.position + movementVector);
+
+            //Вращаем колеса
+            for (int i = 0; i < _rightWheels.Length; i++)
+            {
+                var tr = _rightWheels[i].transform;
+                tr.Rotate(tr.rotation.x + vertInputValue * 5f, 0f, 0f);
+            }
+            for (int i = 0; i < _leftWheels.Length; i++)
+            {
+                var tr = _leftWheels[i].transform;
+                tr.Rotate(tr.rotation.x + vertInputValue * 5f, 0f, 0f);
+            }
         }
 
         /// <summary>
@@ -64,14 +75,18 @@ namespace Assets.Scripts.Player
             Quaternion rotationQuat = Quaternion.Euler(0f, horInputValue * 45f * Time.fixedDeltaTime, 0f);
 
             _rigidBody.MoveRotation(_rigidBody.rotation * rotationQuat);
-        }
 
-        /// <summary>
-        /// Выстрелить
-        /// </summary>
-        public void Fire()
-        {
-            Debug.Log("FIRE");
+            //Поворачиваем колеса
+            for (int i = 0; i < _rightWheels.Length; i++)
+            {
+                var tr = _rightWheels[i].transform;
+                tr.Rotate(tr.rotation.x - horInputValue * 5f, 0f, 0f);
+            }
+            for (int i = 0; i < _leftWheels.Length; i++)
+            {
+                var tr = _leftWheels[i].transform;
+                tr.Rotate(tr.rotation.x + horInputValue * 5f, 0f, 0f);
+            }
         }
     }
 }

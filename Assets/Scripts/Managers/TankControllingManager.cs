@@ -11,7 +11,7 @@ namespace Assets.Scripts.Managers
     /// Класс менеджера для управления танком
     /// </summary>
     [CreateAssetMenu(fileName = "TankControllingManager", menuName = "Game Manager/Tank Controlling Manager")]
-    public class TankControllingManager : AbstractStateMachineManager, IAwake, IFixedUpdate, IUpdate
+    public class TankControllingManager : AbstractStateMachineManager, IAwake, IFixedUpdate
     {
         [Header("Сссылки на переменные ввода")]
         [Tooltip("Ссылка на объект переменной хранящее значение ввода стрелками влево-вправо")]
@@ -22,8 +22,6 @@ namespace Assets.Scripts.Managers
         [Space(10)]
 
         [Header("Ссылки на объекты с событиями ввода")]
-        [Tooltip("Ссылка на объект события нажатия кнопки выстрела")]
-        public GameEventScriptableObject FireButtonPressed;
         [Tooltip("Ссылка на объект события нажатия кнопки следующего оружия")]
         public GameEventScriptableObject NextWeaponButtonPressed;
         [Tooltip("Ссылка на объект события нажатия кнопки предыдущего оружия")]
@@ -37,15 +35,14 @@ namespace Assets.Scripts.Managers
         {
             UpdateManager.Register(this);
 
-            //Подписываемся на нажатие выстрела
-            FireButtonPressed.OnGameEvent += FireButtonPressedHandler;
+            //Подписываемся
             PlayerSpawned.OnGameEvent += PlayerSpawnedHandler;
         }
 
         private void OnDisable()
         {
-            //Отписываемся от событий после уничтожения
-            FireButtonPressed.OnGameEvent -= FireButtonPressedHandler;
+            //Отписываемся
+            PlayerSpawned.OnGameEvent -= PlayerSpawnedHandler;
         }
 
         /// <summary>
@@ -55,19 +52,6 @@ namespace Assets.Scripts.Managers
         {
             //Изначально мы находимся в состоянии покоя
             ChangeState(new IdleState(this));
-        }
-
-        /// <summary>
-        /// Обработчик нажатия на кнопку выстрел
-        /// </summary>
-        private void FireButtonPressedHandler()
-        {
-            (CurrentState as TankState).Fire();        
-        }
-
-        public void OnUpdate()
-        {
-            //(CurrentState as TankState).Stay();
         }
 
         public void OnFixedUpdate()

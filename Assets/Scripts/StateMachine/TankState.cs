@@ -19,8 +19,5 @@ namespace Assets.Scripts.StateMachine
 
         public virtual void Turn()
         { }
-
-        public virtual void Fire()
-        { }
     }
 }

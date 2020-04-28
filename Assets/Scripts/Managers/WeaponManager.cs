@@ -20,6 +20,9 @@ namespace Assets.Scripts.Managers
         [Tooltip("Количество возможных пуль на сцене")]
         public IntReference BulletCount;
 
+        [Tooltip("Префаб пули")]
+        public GameObject BulletPrefab;
+
         [Header("Ссылки на объекты событий")]
         [Tooltip("Ссылка на событие изменения выбранного оружия")]
         public GameEventScriptableObject WeaponChangedEvent;
@@ -29,6 +32,8 @@ namespace Assets.Scripts.Managers
         public GameEventScriptableObject NextWeaponButtonEvent;
         [Tooltip("Ссылка на событие нажатия кнопки предыдущего оружия ")]
         public GameEventScriptableObject PreviosWeaponButtonEvent;
+        [Tooltip("Ссылка на событие нажатия кнопки выстрела")]
+        public GameEventScriptableObject FireButtonEvent;
 
         //Список скриптовых объектов с описанием видов оружия
         public List<WeaponScriptableObject> WeaponData => _weaponData;
@@ -39,7 +44,7 @@ namespace Assets.Scripts.Managers
         private int _currentWeaponIndex;
 
         //Object pool
-        private List<GameObject> _objectPool = new List<GameObject>();
+        private List<BulletCore> _bulletPool = new List<BulletCore>();
 
         public void OnAwake()
         {
@@ -55,6 +60,15 @@ namespace Assets.Scripts.Managers
             //Подписываемся на нажатия
             NextWeaponButtonEvent.OnGameEvent += NextWeaponHandler;
             PreviosWeaponButtonEvent.OnGameEvent += PreviousWeaponHandler;
+            FireButtonEvent.OnGameEvent += FireBulletHandler;
+
+            //Object pooling
+            for (int i = 0; i < BulletCount; i++)
+            {
+                GameObject bullet = Instantiate(BulletPrefab);
+                bullet.SetActive(false);
+                _bulletPool.Add(bullet.GetComponent<BulletCore>());
+            }
         }
 
         private void OnDisable()
@@ -70,11 +84,11 @@ namespace Assets.Scripts.Managers
         private void NextWeaponHandler()
         {
             if(_currentWeaponIndex + 1 <= _weaponData.Count - 1)
-            {
                 _currentWeaponIndex++;
+            else
+                _currentWeaponIndex = 0;
 
-                WeaponChangedEvent?.Invoke();
-            }
+            WeaponChangedEvent?.Invoke();
         }
 
         /// <summary>
@@ -83,13 +97,64 @@ namespace Assets.Scripts.Managers
         private void PreviousWeaponHandler()
         {
             if (_currentWeaponIndex - 1 >= 0)
-            {
                 _currentWeaponIndex--;
+            else
+                _currentWeaponIndex = 0;
 
-                WeaponChangedEvent?.Invoke();
+            WeaponChangedEvent?.Invoke();
+        }
+
+        /// <summary>
+        /// Вытащить из пула неактивную пулю
+        /// </summary>
+        /// <returns>Неактивная пуля</returns>
+        public BulletCore GetAvailableBullets()
+        {
+            for (int i = 0; i < BulletCount; i++)
+            {
+                if (_bulletPool[i].gameObject.activeInHierarchy == false)
+                    return _bulletPool[i];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Обработчик нажатия на кнопку выстрела
+        /// </summary>
+        public void FireBulletHandler()
+        {
+            var player = ManagerContainer.Get<SpawnManager>().TankReference;
+            if(player != null)
+            {
+                var newBullet = GetAvailableBullets();
+                if (newBullet != null)
+                {
+                    newBullet.SetDescription(CurrentWeapon);
+                    newBullet.transform.position = player.transform.position;
+                    newBullet.transform.rotation = player.transform.rotation;
+                    newBullet.gameObject.SetActive(true);
+                }
+                else
+                    Debug.LogError("Слишком много пуль на сцене");
             }
         }
 
+        /// <summary>
+        /// Получить список активных пуль
+        /// </summary>
+        /// <returns></returns>
+        /*public List<GameObject> GetActiveBullets()
+        {
+            List<GameObject> res = new List<GameObject>();
 
+            for(int i=0;i<BulletCount;i++)
+            {
+                if (_bulletPool[i].activeInHierarchy)
+                    res.Add(_bulletPool[i]);
+            }
+
+            return res;
+        }*/
     }
 }

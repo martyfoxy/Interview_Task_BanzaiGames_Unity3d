@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1403400136232414571}
   - component: {fileID: 2114722838492770728}
   - component: {fileID: 6366991740592567439}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Wheel_f_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7688895531252905372}
   - component: {fileID: 8727731601351351407}
   - component: {fileID: 2380452207437109322}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Yel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,9 +212,12 @@ MonoBehaviour:
     IsConstant: 0
     ConstValue: 0
     Variable: {fileID: 11400000, guid: 4cf9002d62eab994d838370be71ed011, type: 2}
-  FirePressed: {fileID: 0}
-  _rightWheels: []
-  _leftWheels: []
+  _rightWheels:
+  - {fileID: 8574416458934613658}
+  - {fileID: 6186634133366039945}
+  _leftWheels:
+  - {fileID: 3545332120659120324}
+  - {fileID: 969816825296218498}
 --- !u!1 &1641193759526630708
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +229,7 @@ GameObject:
   - component: {fileID: 442916221043226629}
   - component: {fileID: 278021888031611673}
   - component: {fileID: 2110993431285561903}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Canon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +308,7 @@ GameObject:
   - component: {fileID: 2461871828900276643}
   - component: {fileID: 1052951923480716858}
   - component: {fileID: 8781350805366853256}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -385,7 +388,7 @@ GameObject:
   - component: {fileID: 930629993942300306}
   - component: {fileID: 7290505651703514281}
   - component: {fileID: 5721913788655736043}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Wheel_b_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +468,7 @@ GameObject:
   - component: {fileID: 4224812733941447662}
   - component: {fileID: 4353472934263861174}
   - component: {fileID: 1820324300687391531}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Wheel_f_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +547,7 @@ GameObject:
   - component: {fileID: 4743878250017468924}
   - component: {fileID: 5817347920217391218}
   - component: {fileID: 7194830415401120158}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TankFree_Wheel_b_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

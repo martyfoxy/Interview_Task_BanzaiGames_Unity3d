@@ -12,9 +12,13 @@ namespace Assets.Scripts.UI
     //TODO: Избавиться от update!
     public class HealthBar : MonoBehaviour
     {
+        [Header("Ссылки на объекты переменных")]
         [Tooltip("Ссылка на переменную хранящую текущее здоровье")]
         public IntReference HPVariable;
 
+        [Space(10)]
+
+        [Header("Ссылки на компоненты")]
         [Tooltip("Ссылка на изображение заполняющее шкалу")]
         [SerializeField]
         private Image FillImage;

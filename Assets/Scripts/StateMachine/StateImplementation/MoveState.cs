@@ -34,11 +34,5 @@ namespace Assets.Scripts.StateMachine.StateImplementation
             //Переходим в состояние вращения
             StateManager.ChangeState(new TurnState(_controllingManager));
         }
-
-        public override void Fire()
-        {
-            //Стреляем
-            _player?.Fire();
-        }
     }
 }

@@ -16,6 +16,8 @@ MonoBehaviour:
     IsConstant: 1
     ConstValue: 10
     Variable: {fileID: 0}
+  BulletPrefab: {fileID: 9094009511398482965, guid: ebc8ef3e1eaa76c44aacba4e5ec67bf4,
+    type: 3}
   WeaponChangedEvent: {fileID: 11400000, guid: a98e269e78c178745881a9d346581ab6, type: 2}
   NextWeaponButtonEvent: {fileID: 11400000, guid: 0471d97dd90c5164391e39ec69e06c25,
     type: 2}

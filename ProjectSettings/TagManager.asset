@@ -14,9 +14,9 @@ TagManager:
   - 
   - 
   - Level
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - Bullet
   - 
   - 
   - 

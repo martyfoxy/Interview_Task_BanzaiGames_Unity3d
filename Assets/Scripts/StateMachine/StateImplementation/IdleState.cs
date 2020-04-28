@@ -33,11 +33,5 @@ namespace Assets.Scripts.StateMachine.StateImplementation
             //Переходим в состояние движения
             StateManager.ChangeState(new MoveState(_controllingManager));
         }
-
-        public override void Fire()
-        {
-            //Стреляем
-            _player?.Fire();
-        }
     }
 }

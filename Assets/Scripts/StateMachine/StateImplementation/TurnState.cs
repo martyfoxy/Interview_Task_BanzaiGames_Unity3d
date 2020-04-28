@@ -34,11 +34,5 @@ namespace Assets.Scripts.StateMachine.StateImplementation
             //Поворачиваем танк
             _player?.RotateTank(_controllingManager.HorizontalInput.Value);
         }
-
-        public override void Fire()
-        {
-            //Стреляем
-            _player?.Fire();
-        }
     }
 }
