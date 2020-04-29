@@ -1,11 +1,10 @@
 ﻿using Assets.Scripts.Interface;
+using Assets.Scripts.Player;
 using Assets.Scripts.ScriptableObjects;
 using Assets.Scripts.ScriptableObjects.Variables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -14,11 +13,14 @@ namespace Assets.Scripts.Managers
     /// Класс менеджера оружия
     /// </summary>
     [CreateAssetMenu(fileName = "WeaponManager", menuName = "Game Manager/Weapon Manager")]
-    public class WeaponManager : BaseManager, IAwake
+    public class WeaponManager : BaseManager, IAwake, IFixedUpdate
     {
         [Header("Настройки пуль")]
         [Tooltip("Количество возможных пуль на сцене")]
         public IntReference BulletCount;
+
+        [Tooltip("Максимальная координата пули, после которой она скрывается")]
+        public FloatReference BulletMaximumPosition;
 
         [Tooltip("Префаб пули")]
         public GameObject BulletPrefab;
@@ -78,6 +80,21 @@ namespace Assets.Scripts.Managers
             PreviosWeaponButtonEvent.OnGameEvent -= PreviousWeaponHandler;
         }
 
+        public void OnFixedUpdate()
+        {
+            for (int i = 0; i < BulletCount; i++)
+            {
+                if (_bulletPool[i].gameObject.activeInHierarchy)
+                {
+                    var tr = _bulletPool[i].transform;
+
+                    //Если позиция пули выходит за пределы уровня, то скрываем
+                    if (Mathf.Abs(tr.position.x) > BulletMaximumPosition || Mathf.Abs(tr.position.z) > BulletMaximumPosition)
+                        _bulletPool[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         /// <summary>
         /// Обработчик нажатия кнопки следующего оружия
         /// </summary>
@@ -99,7 +116,7 @@ namespace Assets.Scripts.Managers
             if (_currentWeaponIndex - 1 >= 0)
                 _currentWeaponIndex--;
             else
-                _currentWeaponIndex = 0;
+                _currentWeaponIndex = _weaponData.Count - 1;
 
             WeaponChangedEvent?.Invoke();
         }
@@ -108,7 +125,7 @@ namespace Assets.Scripts.Managers
         /// Вытащить из пула неактивную пулю
         /// </summary>
         /// <returns>Неактивная пуля</returns>
-        public BulletCore GetAvailableBullets()
+        private BulletCore GetAvailableBullet()
         {
             for (int i = 0; i < BulletCount; i++)
             {
@@ -122,12 +139,12 @@ namespace Assets.Scripts.Managers
         /// <summary>
         /// Обработчик нажатия на кнопку выстрела
         /// </summary>
-        public void FireBulletHandler()
+        private void FireBulletHandler()
         {
             var player = ManagerContainer.Get<SpawnManager>().TankReference;
             if(player != null)
             {
-                var newBullet = GetAvailableBullets();
+                var newBullet = GetAvailableBullet();
                 if (newBullet != null)
                 {
                     newBullet.SetDescription(CurrentWeapon);
@@ -139,22 +156,5 @@ namespace Assets.Scripts.Managers
                     Debug.LogError("Слишком много пуль на сцене");
             }
         }
-
-        /// <summary>
-        /// Получить список активных пуль
-        /// </summary>
-        /// <returns></returns>
-        /*public List<GameObject> GetActiveBullets()
-        {
-            List<GameObject> res = new List<GameObject>();
-
-            for(int i=0;i<BulletCount;i++)
-            {
-                if (_bulletPool[i].activeInHierarchy)
-                    res.Add(_bulletPool[i]);
-            }
-
-            return res;
-        }*/
     }
 }

@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de481dfb6e15c4d4bb23f4dee7dd17df, type: 3}
   m_Name: SpawnManager
   m_EditorClassIdentifier: 
+  EnemyCount:
+    IsConstant: 1
+    ConstValue: 10
+    Variable: {fileID: 0}
+  MaximumSpawnPosition:
+    IsConstant: 1
+    ConstValue: 50
+    Variable: {fileID: 0}
   PlayerSpawnedEvent: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}
+  EnemyKilledEvent: {fileID: 11400000, guid: da5331eeb50550a4ebd8afb8f4466929, type: 2}

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57491543bf1294646a42a63feb2966bb, type: 3}
-  m_Name: StrongEnemy
+  m_Name: MiddleEnemy
   m_EditorClassIdentifier: 
-  enemyColor: {r: 1, g: 0, b: 0, a: 0}
-  enemyName: "\u0421\u0438\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A"
-  health: 150
-  damage: 8
-  defence: 0.8
+  enemyColor: {r: 1, g: 0, b: 0.9295864, a: 0}
+  enemyName: "\u0421\u0440\u0435\u0434\u043D\u0438\u0439 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A"
+  health: 120
+  damage: 6
+  defence: 0.5
   speed: 2

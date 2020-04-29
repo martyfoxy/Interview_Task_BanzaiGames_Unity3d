@@ -8,9 +8,9 @@ namespace Assets.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "NewEnemyDescription", menuName = "Game Character/New Enemy", order = 1)]
     public class EnemyScriptableObject : ScriptableObject
     {
-        [Tooltip("Используемый префаб противника")]
+        [Tooltip("Цвет противника")]
         [SerializeField]
-        private GameObject usedPrefab;
+        private Color enemyColor;
 
         [Tooltip("Имя противника")]
         [SerializeField]
@@ -19,12 +19,12 @@ namespace Assets.Scripts.ScriptableObjects
         [Tooltip("Начальное здоровье")]
         [SerializeField]
         [Range(50, 200)]
-        private int health;
+        private float health;
 
         [Tooltip("Наносимый урон")]
         [SerializeField]
         [Range(1, 10)]
-        private int damage;
+        private float damage;
 
         [Tooltip("Уровень защиты")]
         [SerializeField]
@@ -40,50 +40,37 @@ namespace Assets.Scripts.ScriptableObjects
         /// <summary>
         /// Префаб противника
         /// </summary>
-        public GameObject UsedPrefab
-        {
-            get => usedPrefab;
-        }
+        public Color EnemyColor => enemyColor;
+        
 
         /// <summary>
         /// Имя противника
         /// </summary>
-        public string EnemyName
-        {
-            get => enemyName;
-        }
+        public string EnemyName => enemyName;
+        
 
         /// <summary>
         /// Здоровье
         /// </summary>
-        public int Health
-        {
-            get => health;
-        }
+        public float Health => health;
+        
 
         /// <summary>
         /// Сила атаки
         /// </summary>
-        public int Damage
-        {
-            get => damage;
-        }
+        public float Damage => damage;
+        
 
         /// <summary>
         /// Защита (от 0 до 1)
         /// </summary>
-        public float Defence
-        {
-            get => defence;
-        }
+        public float Defence => defence;
+        
 
         /// <summary>
         /// Скорость
         /// </summary>
-        public float Speed
-        {
-            get => speed;
-        }
+        public float Speed => speed;
         #endregion
     }
 }

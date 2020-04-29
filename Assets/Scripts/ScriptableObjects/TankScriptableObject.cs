@@ -19,7 +19,7 @@ namespace Assets.Scripts.ScriptableObjects
         [Tooltip("Начальное здоровье танка")]
         [SerializeField]
         [Range(100, 200)]
-        private int health;
+        private float health;
 
         [Tooltip("Уровень защиты")]
         [SerializeField]
@@ -35,42 +35,27 @@ namespace Assets.Scripts.ScriptableObjects
         /// <summary>
         /// Префаб танка
         /// </summary>
-        public GameObject UsedPrefab
-        {
-            get => usedPrefab;
-        }
-
+        public GameObject UsedPrefab  => usedPrefab;
+        
         /// <summary>
         /// Имя танка
         /// </summary>
-        public string TankName
-        {
-            get => tankName;
-        }
-
+        public string TankName => tankName;
+        
         /// <summary>
         /// Здоровье танка
         /// </summary>
-        public int Health
-        {
-            get => health;
-        }
-
+        public float Health  => health;
+        
         /// <summary>
         /// Защита танка (от 0 до 1)
         /// </summary>
-        public float Defence
-        {
-            get => defence;
-        }
-
+        public float Defence  => defence;
+        
         /// <summary>
         /// Скорость танка
         /// </summary>
-        public float Speed
-        {
-            get => speed;
-        }
+        public float Speed => speed;
         #endregion
     }
 }

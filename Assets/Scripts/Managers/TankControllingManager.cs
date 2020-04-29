@@ -19,15 +19,12 @@ namespace Assets.Scripts.Managers
         [Tooltip("Ссылка на объект переменной хранящее значение ввода стрелками вперед-назад")]
         public FloatReference VerticalInput;
 
-        [Space(10)]
-
         [Header("Ссылки на объекты с событиями ввода")]
         [Tooltip("Ссылка на объект события нажатия кнопки следующего оружия")]
         public GameEventScriptableObject NextWeaponButtonPressed;
         [Tooltip("Ссылка на объект события нажатия кнопки предыдущего оружия")]
         public GameEventScriptableObject PreviousButtonPressed;
 
-        [Space(10)]
         [Header("Ссылки на объекты с прочими событиями")]
         public GameEventScriptableObject PlayerSpawned;
 
@@ -56,9 +53,9 @@ namespace Assets.Scripts.Managers
 
         public void OnFixedUpdate()
         {
-            if (VerticalInput.Value != 0)
+            if (Mathf.Abs(VerticalInput.Value) > 0.3f)
                 (CurrentState as TankState).Move();
-            else if (HorizontalInput.Value != 0)
+            else if (Mathf.Abs(HorizontalInput.Value) > 0.2f)
                 (CurrentState as TankState).Turn();
         }
     }

@@ -35,7 +35,12 @@ namespace Assets.Scripts
         {
             var spawnMng = ManagerContainer.Get<SpawnManager>();
 
+            //Создаем танк
             spawnMng.SpawnAnyTank();
+
+            //Создаем 10 врагов
+            for (int i = 0; i < 10; i++)
+                spawnMng.SpawnRandomEnemy();
         }
     }
 }

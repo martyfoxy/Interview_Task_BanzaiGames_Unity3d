@@ -16,6 +16,10 @@ MonoBehaviour:
     IsConstant: 1
     ConstValue: 10
     Variable: {fileID: 0}
+  BulletMaximumPosition:
+    IsConstant: 1
+    ConstValue: 50
+    Variable: {fileID: 0}
   BulletPrefab: {fileID: 9094009511398482965, guid: ebc8ef3e1eaa76c44aacba4e5ec67bf4,
     type: 3}
   WeaponChangedEvent: {fileID: 11400000, guid: a98e269e78c178745881a9d346581ab6, type: 2}
@@ -23,3 +27,4 @@ MonoBehaviour:
     type: 2}
   PreviosWeaponButtonEvent: {fileID: 11400000, guid: 7e983e116424c6b4182a85bbdc554873,
     type: 2}
+  FireButtonEvent: {fileID: 11400000, guid: bbf85cc1a3eb2734a88531aaeed7ac19, type: 2}

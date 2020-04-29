@@ -13,14 +13,13 @@ namespace Assets.Scripts.UI
     public class HealthBar : MonoBehaviour
     {
         [Header("Ссылки на объекты переменных")]
+        [SerializeField]
         [Tooltip("Ссылка на переменную хранящую текущее здоровье")]
-        public IntReference HPVariable;
-
-        [Space(10)]
+        private FloatReference HPVariable;
 
         [Header("Ссылки на компоненты")]
-        [Tooltip("Ссылка на изображение заполняющее шкалу")]
         [SerializeField]
+        [Tooltip("Ссылка на изображение заполняющее шкалу")]
         private Image FillImage;
 
         [Tooltip("Ссылка на TextMeshProUGUI отображающее здоровье")]

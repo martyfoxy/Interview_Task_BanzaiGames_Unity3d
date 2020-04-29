@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57491543bf1294646a42a63feb2966bb, type: 3}
   m_Name: WeakEnemy
   m_EditorClassIdentifier: 
-  usedPrefab: {fileID: 0}
+  enemyColor: {r: 0, g: 1, b: 0.16342616, a: 0}
   enemyName: "\u0421\u043B\u0430\u0431\u044B\u0439 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A"
   health: 100
   damage: 5

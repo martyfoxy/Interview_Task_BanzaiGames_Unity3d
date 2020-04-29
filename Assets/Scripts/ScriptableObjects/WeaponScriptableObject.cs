@@ -15,7 +15,7 @@ namespace Assets.Scripts.ScriptableObjects
         [Tooltip("Наносимый урон")]
         [SerializeField]
         [Range(10, 50)]
-        private int damage;
+        private float damage;
 
         /*[SerializeField]
         [Range(1f, 5f)]
@@ -47,7 +47,7 @@ namespace Assets.Scripts.ScriptableObjects
         /// <summary>
         /// Сила урона
         /// </summary>
-        public int Damage
+        public float Damage
         {
             get => damage;
         }

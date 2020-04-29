@@ -17,8 +17,6 @@ namespace Assets.Scripts.Managers
         [Tooltip("Переменная для ввода стрелками вперед-назад")]
         public FloatReference VerticalInput;
 
-        [Space(10)]
-
         [Header("Ссылки на объекты с событиями ввода")]
         [Tooltip("Ссылка на событие нажатия кнопки выстрела")]
         public GameEventScriptableObject FireEventButton;
