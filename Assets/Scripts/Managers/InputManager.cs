@@ -12,18 +12,23 @@ namespace Assets.Scripts.Managers
     public class InputManager : BaseManager, IAwake, IUpdate
     {
         [Header("Ссылки на объекты с переменными ввода")]
+        [SerializeField]
         [Tooltip("Переменная для ввода стрелками влево-вправо")]
-        public FloatReference HorizontalInput;
+        private FloatReference HorizontalInput;
+        [SerializeField]
         [Tooltip("Переменная для ввода стрелками вперед-назад")]
-        public FloatReference VerticalInput;
+        private FloatReference VerticalInput;
 
         [Header("Ссылки на объекты с событиями ввода")]
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки выстрела")]
-        public GameEventScriptableObject FireEventButton;
+        private GameEventScriptableObject FireEventButton;
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки следующего оружия")]
-        public GameEventScriptableObject NextWeaponButtonEvent;
+        private GameEventScriptableObject NextWeaponButtonEvent;
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки предыдущего оружия ")]
-        public GameEventScriptableObject PreviousWeaponButtonEvent;
+        private GameEventScriptableObject PreviousWeaponButtonEvent;
 
         public void OnAwake()
         {

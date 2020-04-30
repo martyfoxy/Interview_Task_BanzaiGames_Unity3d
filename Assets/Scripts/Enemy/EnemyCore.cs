@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Managers;
-using Assets.Scripts.Player;
+﻿using Assets.Scripts.Player;
 using Assets.Scripts.ScriptableObjects;
 using TMPro;
 using UnityEngine;

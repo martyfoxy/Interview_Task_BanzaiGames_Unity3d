@@ -28,10 +28,10 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            CurrentWeaponTextMesh.text = ManagerContainer.Get<WeaponManager>().CurrentWeapon.WeaponName;
+            WeaponChangedHandler();
         }
 
-        private void WeaponChangedHandler()        
+        private void WeaponChangedHandler()
         {
             CurrentWeaponTextMesh.text = ManagerContainer.Get<WeaponManager>().CurrentWeapon.WeaponName;
         }

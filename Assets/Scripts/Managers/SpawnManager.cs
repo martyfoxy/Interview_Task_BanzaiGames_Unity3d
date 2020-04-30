@@ -16,18 +16,23 @@ namespace Assets.Scripts.Managers
     public class SpawnManager : BaseManager, IAwake
     {
         [Header("Настройки создания")]
+        [SerializeField]
         [Tooltip("Максимальное количество врагов на сцене")]
-        public IntReference EnemyCount;
+        private IntReference EnemyCount;
+        [SerializeField]
         [Tooltip("Максимальная позиция по X и Z, где могут создаваться враги")]
-        public FloatReference MaximumSpawnPosition;
+        private FloatReference MaximumSpawnPosition;
 
         [Header("Ссылки на объекты с событиями")]
+        [SerializeField]
         [Tooltip("Ссылка на объект события создания игрока")]
-        public GameEventScriptableObject PlayerSpawnedEvent;
+        private GameEventScriptableObject PlayerSpawnedEvent;
+        [SerializeField]
         [Tooltip("Ссылка на объект события убийства игрока")]
-        public GameEventScriptableObject PlayerKilledEvent;
+        private GameEventScriptableObject PlayerKilledEvent;
+        [SerializeField]
         [Tooltip("Ссылка на объект события убийства врага")]
-        public GameEventScriptableObject EnemyKilledEvent;
+        private GameEventScriptableObject EnemyKilledEvent;
 
         [Header("Используемые префабы")]
         [SerializeField]
