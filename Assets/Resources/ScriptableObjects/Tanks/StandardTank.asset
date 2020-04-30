@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e894cae0c3458a48b44aee927bf9d7c, type: 3}
   m_Name: StandardTank
   m_EditorClassIdentifier: 
-  usedPrefab: {fileID: 1013459266845585946, guid: ae98f3b2f9fb19e4dba07742ad8d6f4d,
-    type: 3}
+  tankColor: {r: 1, g: 1, b: 1, a: 0}
   tankName: "\u0421\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u044B\u0439 \u0442\u0430\u043D\u043A"
   health: 100
   defence: 0.8
-  speed: 3
+  speed: 5

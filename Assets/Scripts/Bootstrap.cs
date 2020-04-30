@@ -36,7 +36,7 @@ namespace Assets.Scripts
             var spawnMng = ManagerContainer.Get<SpawnManager>();
 
             //Создаем танк
-            spawnMng.SpawnAnyTank();
+            spawnMng.SpawnRandomTank();
 
             //Создаем 10 врагов
             for (int i = 0; i < 10; i++)

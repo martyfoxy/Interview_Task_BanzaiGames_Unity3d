@@ -19,27 +19,22 @@ namespace Assets.Scripts.Managers
         [Tooltip("Ссылка на объект переменной хранящее значение ввода стрелками вперед-назад")]
         public FloatReference VerticalInput;
 
-        [Header("Ссылки на объекты с событиями ввода")]
-        [Tooltip("Ссылка на объект события нажатия кнопки следующего оружия")]
-        public GameEventScriptableObject NextWeaponButtonPressed;
-        [Tooltip("Ссылка на объект события нажатия кнопки предыдущего оружия")]
-        public GameEventScriptableObject PreviousButtonPressed;
-
         [Header("Ссылки на объекты с прочими событиями")]
-        public GameEventScriptableObject PlayerSpawned;
+        [SerializeField]
+        private GameEventScriptableObject PlayerSpawnedEvent;
 
         public void OnAwake()
         {
             UpdateManager.Register(this);
 
             //Подписываемся
-            PlayerSpawned.OnGameEvent += PlayerSpawnedHandler;
+            PlayerSpawnedEvent.OnGameEvent += PlayerSpawnedHandler;
         }
 
         private void OnDisable()
         {
             //Отписываемся
-            PlayerSpawned.OnGameEvent -= PlayerSpawnedHandler;
+            PlayerSpawnedEvent.OnGameEvent -= PlayerSpawnedHandler;
         }
 
         /// <summary>

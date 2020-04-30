@@ -5,12 +5,12 @@ namespace Assets.Scripts.ScriptableObjects
     /// <summary>
     /// Класс скриптового объекта танка
     /// </summary>
-    [CreateAssetMenu(fileName = "NewTankDescription", menuName = "Game Data/New Tank", order = 0)]
+    [CreateAssetMenu(fileName = "NewTankDescription", menuName = "Game Data/New Tank")]
     public class TankScriptableObject : ScriptableObject
     {
-        [Tooltip("Используемый префаб танка")]
+        [Tooltip("Цвет танка")]
         [SerializeField]
-        private GameObject usedPrefab;
+        private Color tankColor;
 
         [Tooltip("Имя танка")]
         [SerializeField]
@@ -33,9 +33,9 @@ namespace Assets.Scripts.ScriptableObjects
 
         #region Публичные свойства
         /// <summary>
-        /// Префаб танка
+        /// Цвет танка
         /// </summary>
-        public GameObject UsedPrefab  => usedPrefab;
+        public Color TankColor  => tankColor;
         
         /// <summary>
         /// Имя танка

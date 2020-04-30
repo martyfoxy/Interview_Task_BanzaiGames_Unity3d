@@ -14,7 +14,7 @@ namespace Assets.Scripts.StateMachine.StateImplementation
         public TurnState(TankControllingManager controllingManager) : base(controllingManager)
         {
             _controllingManager = controllingManager;
-            _player = ManagerContainer.Get<SpawnManager>().TankReference;
+            _player = ManagerContainer.Get<SpawnManager>().SpawnedTank;
         }
 
         public override void Stay()

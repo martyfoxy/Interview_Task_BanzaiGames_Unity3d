@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Camera Manager
   m_EditorClassIdentifier: 
   CameraSpeed: 1
-  CameraOffset: {x: 0, y: 2, z: -5}
+  CameraOffset: {x: 0, y: 4, z: -5}
   PlayerSpawnedEvent: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}

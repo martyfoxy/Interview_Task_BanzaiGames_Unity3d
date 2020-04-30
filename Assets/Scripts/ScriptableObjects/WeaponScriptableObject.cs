@@ -8,6 +8,10 @@ namespace Assets.Scripts.ScriptableObjects
     [CreateAssetMenu(fileName = "NewWeaponDescription", menuName = "Game Data/New Weapon", order = 1)]
     public class WeaponScriptableObject : ScriptableObject
     {
+        [Tooltip("Цвет оружия")]
+        [SerializeField]
+        private Color weaponColor;
+
         [Tooltip("Имя оружия")]
         [SerializeField]
         private string weaponName;
@@ -17,73 +21,35 @@ namespace Assets.Scripts.ScriptableObjects
         [Range(10, 50)]
         private float damage;
 
-        /*[SerializeField]
-        [Range(1f, 5f)]
-        private float hitRange;*/
-
-        [Tooltip("Задержка после выстрела")]
-        [SerializeField]
-        [Range(0f, 3f)]
-        private float fireDelay;
-
         [Tooltip("Тип оружия")]
         [SerializeField]
         private WeaponTypeEnum weaponType;
 
-        [Tooltip("Отдача")]
-        [SerializeField]
-        [Range(0f, 1f)]
-        private float recoil;
-
         #region Публичные свойства
+        public Color WeaponColor => weaponColor;
         /// <summary>
         /// Название оружия
         /// </summary>
-        public string WeaponName
-        {
-            get => weaponName;
-        }
+        public string WeaponName => weaponName;
 
         /// <summary>
         /// Сила урона
         /// </summary>
-        public float Damage
-        {
-            get => damage;
-        }
-
-        /// <summary>
-        /// Задержка между выстрелами
-        /// </summary>
-        public float FireDelay
-        {
-            get => fireDelay;
-        }
+        public float Damage => damage;
 
         /// <summary>
         /// Тип оружия
         /// </summary>
-        public WeaponTypeEnum WeaponType
-        {
-            get => weaponType;
-        }
-
-        /// <summary>
-        /// Сила отдачи
-        /// </summary>
-        public float Recoil
-        {
-            get => recoil;
-        }
+        public WeaponTypeEnum WeaponType => weaponType;
         #endregion
     }
 
     /// <summary>
-    /// Перечисление возможных типов оружия игрока
+    /// Перечисление типов оружия
     /// </summary>
     public enum WeaponTypeEnum
     {
-        TankGun,
+        Canon,
         MachineGun
-    };
+    }
 }

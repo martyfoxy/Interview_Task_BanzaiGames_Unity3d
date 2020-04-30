@@ -9,12 +9,10 @@ namespace Assets.Scripts.StateMachine.StateImplementation
     public class IdleState : TankState
     {
         private TankControllingManager _controllingManager;
-        private TankCore _player;
 
         public IdleState(TankControllingManager controllingManager) : base(controllingManager)
         {
             _controllingManager = controllingManager;
-            _player = ManagerContainer.Get<SpawnManager>().TankReference;
         }
 
         public override void Stay()

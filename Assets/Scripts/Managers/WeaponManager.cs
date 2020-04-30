@@ -16,37 +16,44 @@ namespace Assets.Scripts.Managers
     public class WeaponManager : BaseManager, IAwake, IFixedUpdate
     {
         [Header("Настройки пуль")]
+        [SerializeField]
         [Tooltip("Количество возможных пуль на сцене")]
-        public IntReference BulletCount;
-
+        private IntReference BulletCount;
+        [SerializeField]
         [Tooltip("Максимальная координата пули, после которой она скрывается")]
-        public FloatReference BulletMaximumPosition;
-
+        private FloatReference BulletMaximumPosition;
+        [SerializeField]
         [Tooltip("Префаб пули")]
-        public GameObject BulletPrefab;
+        private GameObject BulletPrefab;
 
         [Header("Ссылки на объекты событий")]
+        [SerializeField]
         [Tooltip("Ссылка на событие изменения выбранного оружия")]
-        public GameEventScriptableObject WeaponChangedEvent;
+        private GameEventScriptableObject WeaponChangedEvent;
+        [SerializeField]
+        [Tooltip("Ссылка на событие создания игрока")]
+        private GameEventScriptableObject PlayerSpawnedEvent;
 
         [Header("Ссылки на объекты с событиями ввода")]
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки следующего оружия")]
-        public GameEventScriptableObject NextWeaponButtonEvent;
+        private GameEventScriptableObject NextWeaponButtonEvent;
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки предыдущего оружия ")]
-        public GameEventScriptableObject PreviosWeaponButtonEvent;
+        private GameEventScriptableObject PreviosWeaponButtonEvent;
+        [SerializeField]
         [Tooltip("Ссылка на событие нажатия кнопки выстрела")]
-        public GameEventScriptableObject FireButtonEvent;
+        private GameEventScriptableObject FireButtonEvent;
 
-        //Список скриптовых объектов с описанием видов оружия
-        public List<WeaponScriptableObject> WeaponData => _weaponData;
-        private List<WeaponScriptableObject> _weaponData = new List<WeaponScriptableObject>();
-
-        //Текущее выбранное оружие
+        /// <summary>
+        /// Текущее выбранное оружие
+        /// </summary>
         public WeaponScriptableObject CurrentWeapon => _weaponData[_currentWeaponIndex];
-        private int _currentWeaponIndex;
 
-        //Object pool
+        private List<WeaponScriptableObject> _weaponData = new List<WeaponScriptableObject>();
+        private int _currentWeaponIndex;
         private List<BulletCore> _bulletPool = new List<BulletCore>();
+        private Transform _tankTransform;
 
         public void OnAwake()
         {
@@ -59,11 +66,6 @@ namespace Assets.Scripts.Managers
             else
                 throw new Exception("Не загружено ни одного описания оружия");
 
-            //Подписываемся на нажатия
-            NextWeaponButtonEvent.OnGameEvent += NextWeaponHandler;
-            PreviosWeaponButtonEvent.OnGameEvent += PreviousWeaponHandler;
-            FireButtonEvent.OnGameEvent += FireBulletHandler;
-
             //Object pooling
             for (int i = 0; i < BulletCount; i++)
             {
@@ -71,6 +73,12 @@ namespace Assets.Scripts.Managers
                 bullet.SetActive(false);
                 _bulletPool.Add(bullet.GetComponent<BulletCore>());
             }
+
+            //Подписываемся на нажатия
+            NextWeaponButtonEvent.OnGameEvent += NextWeaponHandler;
+            PreviosWeaponButtonEvent.OnGameEvent += PreviousWeaponHandler;
+            FireButtonEvent.OnGameEvent += FireBulletHandler;
+            PlayerSpawnedEvent.OnTransformEvent += PlayerTransformHandler;
         }
 
         private void OnDisable()
@@ -78,17 +86,18 @@ namespace Assets.Scripts.Managers
             //Отписываемся
             NextWeaponButtonEvent.OnGameEvent -= NextWeaponHandler;
             PreviosWeaponButtonEvent.OnGameEvent -= PreviousWeaponHandler;
+            FireButtonEvent.OnGameEvent -= FireBulletHandler;
+            PlayerSpawnedEvent.OnTransformEvent -= PlayerTransformHandler;
         }
-
         public void OnFixedUpdate()
         {
+            //Если позиция пули выходит за пределы уровня, то скрываем
             for (int i = 0; i < BulletCount; i++)
             {
                 if (_bulletPool[i].gameObject.activeInHierarchy)
                 {
                     var tr = _bulletPool[i].transform;
 
-                    //Если позиция пули выходит за пределы уровня, то скрываем
                     if (Mathf.Abs(tr.position.x) > BulletMaximumPosition || Mathf.Abs(tr.position.z) > BulletMaximumPosition)
                         _bulletPool[i].gameObject.SetActive(false);
                 }
@@ -105,7 +114,7 @@ namespace Assets.Scripts.Managers
             else
                 _currentWeaponIndex = 0;
 
-            WeaponChangedEvent?.Invoke();
+            WeaponChangedEvent.Invoke();
         }
 
         /// <summary>
@@ -118,7 +127,7 @@ namespace Assets.Scripts.Managers
             else
                 _currentWeaponIndex = _weaponData.Count - 1;
 
-            WeaponChangedEvent?.Invoke();
+            WeaponChangedEvent.Invoke();
         }
 
         /// <summary>
@@ -137,19 +146,27 @@ namespace Assets.Scripts.Managers
         }
 
         /// <summary>
+        /// Обработчик события создания игрока, в качестве аргумента получаего его Transform
+        /// </summary>
+        /// <param name="args"></param>
+        private void PlayerTransformHandler(TransformArgs args)
+        {
+            _tankTransform = args.TransformArg;
+        }
+
+        /// <summary>
         /// Обработчик нажатия на кнопку выстрела
         /// </summary>
         private void FireBulletHandler()
         {
-            var player = ManagerContainer.Get<SpawnManager>().TankReference;
-            if(player != null)
+            if(_tankTransform != null)
             {
                 var newBullet = GetAvailableBullet();
                 if (newBullet != null)
                 {
-                    newBullet.SetDescription(CurrentWeapon);
-                    newBullet.transform.position = player.transform.position;
-                    newBullet.transform.rotation = player.transform.rotation;
+                    newBullet.WeaponDescription = CurrentWeapon;
+                    newBullet.transform.position = _tankTransform.position;
+                    newBullet.transform.rotation = _tankTransform.rotation;
                     newBullet.gameObject.SetActive(true);
                 }
                 else

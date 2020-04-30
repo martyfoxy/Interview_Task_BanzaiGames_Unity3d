@@ -21,4 +21,9 @@ MonoBehaviour:
     ConstValue: 50
     Variable: {fileID: 0}
   PlayerSpawnedEvent: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}
+  PlayerKilledEvent: {fileID: 11400000, guid: 4826b48e590e3924eb37292eb09850a1, type: 2}
   EnemyKilledEvent: {fileID: 11400000, guid: da5331eeb50550a4ebd8afb8f4466929, type: 2}
+  EnemyPrefab: {fileID: 6187110394604081484, guid: d1f58779f099b5049ae97ee188d3923e,
+    type: 3}
+  TankPrefab: {fileID: 1013459266845585946, guid: ae98f3b2f9fb19e4dba07742ad8d6f4d,
+    type: 3}

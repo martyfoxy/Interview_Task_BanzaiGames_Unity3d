@@ -2,6 +2,9 @@
 using Assets.Scripts.ScriptableObjects;
 using Assets.Scripts.ScriptableObjects.Variables;
 using Assets.Scripts.Enemy;
+using Assets.Scripts.Managers;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.Player
 {
@@ -10,12 +13,14 @@ namespace Assets.Scripts.Player
     /// </summary>
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(MeshRenderer))]
     public class TankCore : MonoBehaviour
     {
         [SerializeField]
         [Tooltip("Слои, которые наносят урон")]
-        private LayerMask EnemyLayer;
+        private LayerMask HarmLayer;
 
+        [Header("Ссылки на события и переменные")]
         [SerializeField]
         [Tooltip("Ссылка на переменную хранящую текущее здоровье")]
         private FloatReference CurrentHealthVariable;
@@ -24,20 +29,58 @@ namespace Assets.Scripts.Player
         [Tooltip("Ссылка на объект события убийства игрока")]
         private GameEventScriptableObject PlayerKilledEvent;
 
-        //Используемый объект описания танка
-        private TankScriptableObject _tankDescription;
-
-        //Ссылки на колеса танка
         [SerializeField]
-        private GameObject[] _rightWheels;
+        [Tooltip("Ссылка на объект события убийства врага")]
+        private GameEventScriptableObject EnemyKilledEvent;
+
         [SerializeField]
-        private GameObject[] _leftWheels;
+        [Tooltip("Ссылка на объект смены текущего оружия")]
+        private GameEventScriptableObject WeaponChangedEvent;
 
-        //Ссылки на компоненты танка
-        private Rigidbody _rigidBody;
-        private BoxCollider _boxCollider;
+        [Header("Ссылки на внутренние объекты и компоненты")]
+        [SerializeField]
+        [Tooltip("Ссылки на внутренние объекты правых колес танка")]
+        private GameObject[] RightWheels;
 
-        //Локальные переменные
+        [SerializeField]
+        [Tooltip("Ссылки на внутренние объекты левых колес танка")]
+        private GameObject[] LeftWheels;
+
+        [SerializeField]
+        [Tooltip("Ссылка на внутренний объект обычной пушки")]
+        private GameObject Canon;
+
+        [SerializeField]
+        [Tooltip("Ссылка на внутренний объект пулемета")]
+        public GameObject MachineGun;
+
+        [SerializeField]
+        [Tooltip("Ссылки на все MeshRenderer тела танка")]
+        private MeshRenderer[] BodyMeshRenderers;
+
+        /// <summary>
+        /// Описание танка
+        /// </summary>
+        public TankScriptableObject TankDescription
+        {
+            get
+            {
+                return _tankDescription;
+            }
+            set
+            {
+                _tankDescription = value;
+
+                CurrentHealth = value.Health;
+
+                for (int i = 0; i < BodyMeshRenderers.Length; i++)
+                    BodyMeshRenderers[i].material.color = value.TankColor;
+            }
+        }
+
+        /// <summary>
+        /// Текущее здоровье
+        /// </summary>
         public float CurrentHealth
         {
             get
@@ -49,41 +92,96 @@ namespace Assets.Scripts.Player
                 CurrentHealthVariable.Variable.SetValue(value);
 
                 if(CurrentHealthVariable <= 0f)
+                {
+                    gameObject.SetActive(false);
                     PlayerKilledEvent.Invoke();
+                }
             }
         }
+
+        private TankScriptableObject _tankDescription;
+        private Rigidbody _rigidBody;
+        private Dictionary<EnemyCore, Coroutine> _takenDamageFrom = new Dictionary<EnemyCore, Coroutine>();
 
         private void Awake()
         {
             _rigidBody = GetComponent<Rigidbody>();
-            _boxCollider = GetComponent<BoxCollider>();
+        }
+
+        private void OnEnable()
+        {
+            WeaponChangedEvent.OnGameEvent += WeaponChangedHandler;
+            EnemyKilledEvent.OnTransformEvent += EnemyTransformHandler;
+        }
+
+        private void OnDisable()
+        {
+            WeaponChangedEvent.OnGameEvent -= WeaponChangedHandler;
+            EnemyKilledEvent.OnTransformEvent -= EnemyTransformHandler;
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             var otherLayer = collision.collider.gameObject.layer;
 
-            if ((EnemyLayer & 1 << otherLayer) == 1 << otherLayer)
+            if ((HarmLayer & 1 << otherLayer) == 1 << otherLayer)
             {
                 EnemyCore enemy = collision.gameObject.GetComponent<EnemyCore>();
-                Harm(enemy.GetDescription());
+                if (!_takenDamageFrom.ContainsKey(enemy))
+                {
+                    var newCoroutine = StartCoroutine(DamagerPlayer(enemy.EnemyDescription, 1f));
+                    _takenDamageFrom.Add(enemy, newCoroutine);
+                }
+            }
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            var otherLayer = collision.collider.gameObject.layer;
+
+            if ((HarmLayer & 1 << otherLayer) == 1 << otherLayer)
+            {
+                EnemyCore enemy = collision.gameObject.GetComponent<EnemyCore>();
+                if (_takenDamageFrom.ContainsKey(enemy))
+                {
+                    StopCoroutine(_takenDamageFrom[enemy]);
+                    _takenDamageFrom.Remove(enemy);
+                }
             }
         }
 
         /// <summary>
-        /// Задать описание танка
+        /// Обработчик события убийства врага, принимает на вход Transform
+        /// Это обходное решение проблемы, что при убийстве врага, не срабатывает OnCollisionEnter и урон продолжает наноситься
         /// </summary>
-        /// <param name="tankDesc">Описание танка</param>
-        public void SetDescription(TankScriptableObject tankDesc)
+        /// <param name="args">Аргумент события</param>
+        private void EnemyTransformHandler(TransformArgs args)
         {
-            _tankDescription = tankDesc;
+            var enemy = args.TransformArg.gameObject.GetComponent<EnemyCore>();
 
-            CurrentHealth = _tankDescription.Health;
+            Coroutine cor;
+            _takenDamageFrom.TryGetValue(enemy, out cor);
+
+            if(cor != null)
+            {
+                StopCoroutine(cor);
+                _takenDamageFrom.Remove(enemy);
+            }
         }
 
-        public TankScriptableObject GetDescription()
+        /// <summary>
+        /// Корутина, которая наносит игроку урон каждые несколько секунд
+        /// </summary>
+        /// <param name="desc">Описание врага</param>
+        /// <param name="seconds">Сколько секунд происходит между атаками</param>
+        /// <returns></returns>
+        IEnumerator DamagerPlayer(EnemyScriptableObject desc, float seconds)
         {
-            return _tankDescription;
+            while(true)
+            {
+                Harm(desc);
+                yield return new WaitForSeconds(seconds);
+            }
         }
 
         /// <summary>
@@ -97,14 +195,14 @@ namespace Assets.Scripts.Player
             _rigidBody.MovePosition(_rigidBody.position + movementVector);
 
             //Вращаем колеса
-            for (int i = 0; i < _rightWheels.Length; i++)
+            for (int i = 0; i < RightWheels.Length; i++)
             {
-                var tr = _rightWheels[i].transform;
+                var tr = RightWheels[i].transform;
                 tr.Rotate(tr.rotation.x + vertInputValue * 5f, 0f, 0f);
             }
-            for (int i = 0; i < _leftWheels.Length; i++)
+            for (int i = 0; i < LeftWheels.Length; i++)
             {
-                var tr = _leftWheels[i].transform;
+                var tr = LeftWheels[i].transform;
                 tr.Rotate(tr.rotation.x + vertInputValue * 5f, 0f, 0f);
             }
         }
@@ -115,30 +213,55 @@ namespace Assets.Scripts.Player
         /// <param name="horInputValue"></param>
         public void RotateTank(float horInputValue)
         {
-            Quaternion rotationQuat = Quaternion.Euler(0f, horInputValue * 45f * Time.fixedDeltaTime, 0f);
+            Quaternion rotationQuat = Quaternion.Euler(0f, horInputValue * 65f * Time.fixedDeltaTime, 0f);
 
             _rigidBody.MoveRotation(_rigidBody.rotation * rotationQuat);
 
             //Поворачиваем колеса
-            for (int i = 0; i < _rightWheels.Length; i++)
+            for (int i = 0; i < RightWheels.Length; i++)
             {
-                var tr = _rightWheels[i].transform;
+                var tr = RightWheels[i].transform;
                 tr.Rotate(tr.rotation.x - horInputValue * 5f, 0f, 0f);
             }
-            for (int i = 0; i < _leftWheels.Length; i++)
+            for (int i = 0; i < LeftWheels.Length; i++)
             {
-                var tr = _leftWheels[i].transform;
+                var tr = LeftWheels[i].transform;
                 tr.Rotate(tr.rotation.x + horInputValue * 5f, 0f, 0f);
             }
         }
 
         /// <summary>
-        /// Метод обработки удара врага
+        /// Нанести урон игроку
         /// </summary>
         /// <param name="enemyDesc">Описание врага, который нанес урон</param>
         private void Harm(EnemyScriptableObject enemyDesc)
         {
             CurrentHealth = CurrentHealthVariable.Value - enemyDesc.Damage * _tankDescription.Defence;
+        }
+
+        /// <summary>
+        /// Обработчик события смены оружия
+        /// </summary>
+        private void WeaponChangedHandler()
+        {
+            //TODO: Не нравится обращение к контейнеру
+            var weapon = ManagerContainer.Get<WeaponManager>().CurrentWeapon;
+
+            switch(weapon.WeaponType)
+            {
+                case WeaponTypeEnum.Canon:
+                    {
+                        Canon.SetActive(true);
+                        MachineGun.SetActive(false);
+                        break;
+                    }
+                case WeaponTypeEnum.MachineGun:
+                    {
+                        Canon.SetActive(false);
+                        MachineGun.SetActive(true);
+                        break;
+                    }
+            }
         }
     }
 }

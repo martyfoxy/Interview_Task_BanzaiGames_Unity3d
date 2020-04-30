@@ -16,7 +16,10 @@ namespace Assets.Scripts.ScriptableObjects
         private List<GameEventListener> _listeners = new List<GameEventListener>();
 
         public delegate void GameEventHandler();
+        public delegate void TransformEventHandler(TransformArgs args);
+
         public event GameEventHandler OnGameEvent;
+        public event TransformEventHandler OnTransformEvent;
 
         /// <summary>
         /// Вызвать обработчик события у всех слушателей
@@ -28,6 +31,15 @@ namespace Assets.Scripts.ScriptableObjects
                 _listeners[i].OnEventInvoked();
 
             OnGameEvent?.Invoke();
+        }
+
+        /// <summary>
+        /// Вызвать событие и передать Transform в качестве параметра
+        /// </summary>
+        /// <param name="arg">Transform</param>
+        public void TransformInvoke(Transform arg)
+        {
+            OnTransformEvent?.Invoke(new TransformArgs(arg));
         }
 
         /// <summary>
@@ -49,5 +61,18 @@ namespace Assets.Scripts.ScriptableObjects
             if (_listeners.Contains(listener))
                 _listeners.Remove(listener);
         }
+    }
+
+    /// <summary>
+    /// Передаваемый аргумент события 
+    /// </summary>
+    public class TransformArgs : EventArgs
+    {
+        public TransformArgs(Transform arg)
+        {
+            TransformArg = arg;
+        }
+
+        public Transform TransformArg {get;private set; }
     }
 }

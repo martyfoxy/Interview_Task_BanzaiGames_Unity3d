@@ -8,8 +8,6 @@ namespace Assets.Scripts.UI
     /// <summary>
     /// Класс управляющий health bar'ом
     /// </summary>
-
-    //TODO: Избавиться от update!
     public class HealthBar : MonoBehaviour
     {
         [Header("Ссылки на объекты переменных")]
@@ -26,6 +24,7 @@ namespace Assets.Scripts.UI
         [SerializeField]
         private TextMeshProUGUI HealthTextMesh;
 
+        //TODO: Избавиться от update!
         private void Update()
         {
             FillImage.fillAmount = Mathf.Clamp01(Mathf.InverseLerp(0, 100, HPVariable));

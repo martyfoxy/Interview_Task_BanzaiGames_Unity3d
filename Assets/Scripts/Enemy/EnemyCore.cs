@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Player;
+﻿using Assets.Scripts.Managers;
+using Assets.Scripts.Player;
 using Assets.Scripts.ScriptableObjects;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Assets.Scripts.Enemy
 {
@@ -11,6 +13,7 @@ namespace Assets.Scripts.Enemy
     [RequireComponent(typeof(BoxCollider))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(MeshRenderer))]
+    [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyCore : MonoBehaviour
     {
         [SerializeField]
@@ -21,15 +24,27 @@ namespace Assets.Scripts.Enemy
         [Tooltip("Ссылка на объект с событием убийства врага")]
         private GameEventScriptableObject EnemyKilledEvent;
 
-        //Используемое описание врага
-        private EnemyScriptableObject _enemyDescription;
+        /// <summary>
+        /// Описание врага
+        /// </summary>
+        public EnemyScriptableObject EnemyDescription
+        {
+            get
+            {
+                return _enemyDescription;
+            }
+            set
+            {
+                _enemyDescription = value;
 
-        //Ссылки на компоненты врага
-        private Rigidbody _rigidBody;
-        private MeshRenderer _meshRenderer;
-        private TextMeshPro _hpBarTextMesh;
+                _meshRenderer.material.color = value.EnemyColor;
+                CurrentHealth = value.Health;
+            }
+        }
 
-        //Локальные переменные
+        /// <summary>
+        /// Текущее здоровье
+        /// </summary>
         public float CurrentHealth
         {
             get
@@ -42,6 +57,12 @@ namespace Assets.Scripts.Enemy
                 OnHealthChanged();
             }
         }
+
+        private EnemyScriptableObject _enemyDescription;
+        private Rigidbody _rigidBody;
+        private MeshRenderer _meshRenderer;
+        private TextMeshPro _hpBarTextMesh;
+        private NavMeshAgent _navMeshAgent;
         private float _currentHealth;
 
         private void Awake()
@@ -49,11 +70,12 @@ namespace Assets.Scripts.Enemy
             _rigidBody = GetComponent<Rigidbody>();
             _meshRenderer = GetComponent<MeshRenderer>();
             _hpBarTextMesh = GetComponentInChildren<TextMeshPro>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
         }
 
         private void OnDisable()
         {
-            //При убийства гасим силу
+            //При убийства гасим действующие силы
             _rigidBody.velocity = Vector3.zero;
             _rigidBody.angularVelocity = Vector3.zero;
         }
@@ -65,29 +87,17 @@ namespace Assets.Scripts.Enemy
             if ((BulletLayer & 1 << otherLayer) == 1 << otherLayer)
             {
                 BulletCore bullet = collision.gameObject.GetComponent<BulletCore>();
-                Harm(bullet.GetDescription());
+                Harm(bullet.WeaponDescription);
             }
         }
 
         /// <summary>
-        /// Задать описание врага
+        /// Задать цель для преследования 
         /// </summary>
-        /// <param name="enemyDesc">Описание врага</param>
-        public void SetDescription(EnemyScriptableObject enemyDesc)
+        /// <param name="target">Трансформ</param>
+        public void SetDestination(Transform target)
         {
-            _enemyDescription = enemyDesc;
-
-            _meshRenderer.material.color = enemyDesc.EnemyColor;
-            CurrentHealth = enemyDesc.Health;
-        }
-
-        /// <summary>
-        /// Получить описание врага
-        /// </summary>
-        /// <returns>Описание врага</returns>
-        public EnemyScriptableObject GetDescription()
-        {
-            return _enemyDescription;
+            _navMeshAgent.SetDestination(target.position);
         }
 
         /// <summary>
@@ -97,6 +107,10 @@ namespace Assets.Scripts.Enemy
         private void Harm(WeaponScriptableObject weaponDesc)
         {
             CurrentHealth = _currentHealth - weaponDesc.Damage * _enemyDescription.Defence;
+
+            //Гасим действующие силы
+            _rigidBody.velocity = Vector3.zero;
+            _rigidBody.angularVelocity = Vector3.zero;
         }
 
         /// <summary>
@@ -110,6 +124,7 @@ namespace Assets.Scripts.Enemy
             {
                 gameObject.SetActive(false);
                 EnemyKilledEvent.Invoke();
+                EnemyKilledEvent.TransformInvoke(transform);
             }
         }
     }

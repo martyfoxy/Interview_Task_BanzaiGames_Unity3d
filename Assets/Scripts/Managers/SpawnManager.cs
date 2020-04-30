@@ -18,32 +18,38 @@ namespace Assets.Scripts.Managers
         [Header("Настройки создания")]
         [Tooltip("Максимальное количество врагов на сцене")]
         public IntReference EnemyCount;
-
         [Tooltip("Максимальная позиция по X и Z, где могут создаваться враги")]
         public FloatReference MaximumSpawnPosition;
 
         [Header("Ссылки на объекты с событиями")]
         [Tooltip("Ссылка на объект события создания игрока")]
         public GameEventScriptableObject PlayerSpawnedEvent;
-
+        [Tooltip("Ссылка на объект события убийства игрока")]
+        public GameEventScriptableObject PlayerKilledEvent;
         [Tooltip("Ссылка на объект события убийства врага")]
         public GameEventScriptableObject EnemyKilledEvent;
 
-        //Ссылка на танк
-        public TankCore TankReference => _tankReference;
-        private TankCore _tankReference;
+        [Header("Используемые префабы")]
+        [SerializeField]
+        [Tooltip("Префаб врага")]
+        private GameObject EnemyPrefab;
+        [SerializeField]
+        [Tooltip("Префаб танка")]
+        private GameObject TankPrefab;
 
-        //Префаб противника
-        private GameObject _enemyPrefab;
+        /// <summary>
+        /// Ссылка на танк
+        /// </summary>
+        public TankCore SpawnedTank => _tankPool;
+        
+        /// <summary>
+        /// Ссылки на созданных противников
+        /// </summary>
+        public List<EnemyCore> SpawnedEnemies => _enemyPool;
 
-        //Ссылки на созданных противников
+        private TankCore _tankPool;
         private List<EnemyCore> _enemyPool = new List<EnemyCore>();
-
-        //Списки скриптовых объектов с описанием создаваемых персонажей
-        public List<EnemyScriptableObject> EnemiedData => _enemiesData;
         private List<EnemyScriptableObject> _enemiesData = new List<EnemyScriptableObject>();
-
-        public List<TankScriptableObject> TanksData => TanksData;
         private List<TankScriptableObject> _tanksData = new List<TankScriptableObject>();
 
         public void OnAwake()
@@ -52,30 +58,33 @@ namespace Assets.Scripts.Managers
             _enemiesData.AddRange(Resources.LoadAll<EnemyScriptableObject>("ScriptableObjects/Enemies").ToList());
             _tanksData.AddRange(Resources.LoadAll<TankScriptableObject>("ScriptableObjects/Tanks").ToList());
 
-            //Грузим префабы
-            _enemyPrefab = Resources.Load<GameObject>("Prefabs/EnemyPrefab");
-
             //Object pooling
             for (int i = 0; i < EnemyCount; i++)
             {
-                GameObject enemy = Instantiate(_enemyPrefab);
+                GameObject enemy = Instantiate(EnemyPrefab);
                 enemy.SetActive(false);
                 _enemyPool.Add(enemy.GetComponent<EnemyCore>());
             }
 
-            //Подписываемся на событие убийства врага, чтобы пересоздать его
+            GameObject tank = Instantiate(TankPrefab);
+            tank.SetActive(false);
+            _tankPool = tank.GetComponent<TankCore>();
+
+            //Подписываемся на события
             EnemyKilledEvent.OnGameEvent += SpawnRandomEnemy;
+            PlayerKilledEvent.OnGameEvent += SpawnRandomTank;
         }
 
         private void OnDisable()
         {
             EnemyKilledEvent.OnGameEvent -= SpawnRandomEnemy;
+            PlayerKilledEvent.OnGameEvent -= SpawnRandomTank;
         }
 
         /// <summary>
-        /// Тестовый метод. Создает на сцене танк со случайным описанием
+        /// Создает на сцене танк со случайным описанием
         /// </summary>
-        public void SpawnAnyTank()
+        public void SpawnRandomTank()
         {
             var randomDesc = _tanksData[Random.Range(0, _tanksData.Count)];
 
@@ -83,9 +92,8 @@ namespace Assets.Scripts.Managers
         }
 
         /// <summary>
-        /// Создать на сцене противника согласно описанию
+        /// Создать на сцене противника со случайным описанием
         /// </summary>
-        /// <param name="description">Скриптовый объект с описанием</param>
         public void SpawnRandomEnemy()
         {
             //Берем случайное описание врага
@@ -97,8 +105,8 @@ namespace Assets.Scripts.Managers
             EnemyCore newEnemy = GetAvailableEnemy();
             if (newEnemy != null)
             {
-                newEnemy.SetDescription(descriptionInstance);
                 newEnemy.transform.position = new Vector3(Random.Range(-MaximumSpawnPosition, MaximumSpawnPosition), 1.5f, Random.Range(-MaximumSpawnPosition, MaximumSpawnPosition));
+                newEnemy.EnemyDescription = descriptionInstance;
                 newEnemy.gameObject.SetActive(true);
             }
             else
@@ -109,19 +117,23 @@ namespace Assets.Scripts.Managers
         /// Создать на сцене танк согласно описанию
         /// </summary>
         /// <param name="description">Скриптовый объект с описанием</param>
-        private TankCore SpawnPlayerTank(TankScriptableObject description)
+        private void SpawnPlayerTank(TankScriptableObject description)
         {
+            //Копируем описание
             var descriptionInstance = Instantiate(description);
 
-            var go = Instantiate(description.UsedPrefab, new Vector3(), Quaternion.identity) as GameObject;
-            var tankCore = go.GetComponent<TankCore>();
-            tankCore.SetDescription(descriptionInstance);
+            TankCore newTank = _tankPool;
+            if (_tankPool.gameObject.activeInHierarchy == false)
+            {
+                newTank.transform.position = new Vector3(Random.Range(-MaximumSpawnPosition, MaximumSpawnPosition), 1.5f, Random.Range(-MaximumSpawnPosition, MaximumSpawnPosition));
+                newTank.TankDescription = descriptionInstance;
+                newTank.gameObject.SetActive(true);
 
-            _tankReference = tankCore;
-
-            PlayerSpawnedEvent.Invoke();
-
-            return tankCore;
+                PlayerSpawnedEvent.Invoke();
+                PlayerSpawnedEvent.TransformInvoke(newTank.transform);
+            }
+            else
+                Debug.Log("Танк уже создан на сцене");
         }
 
         /// <summary>

@@ -14,11 +14,23 @@ namespace Assets.Scripts.Player
         [Tooltip("Какие слои уничтожают пулю")]
         private LayerMask DestroyingLayers;
 
-        //Описание оружия из которого была выстрелена пуля
-        private WeaponScriptableObject _weaponDescription;
+        /// <summary>
+        /// Описание оружия из которого была выстрелена пуля
+        /// </summary>
+        public WeaponScriptableObject WeaponDescription
+        {
+            get
+            {
+                return _weaponDescription;
+            }
+            set
+            {
+                _weaponDescription = value;
+            }
+        }
 
-        //Список компонентов
         private Rigidbody _rigidBody;
+        private WeaponScriptableObject _weaponDescription;
 
         private void Awake()
         {
@@ -35,24 +47,6 @@ namespace Assets.Scripts.Player
             //При скрытии пули отменяем движущую силу
             _rigidBody.velocity = Vector3.zero;
             _rigidBody.angularVelocity = Vector3.zero;
-        }
-
-        /// <summary>
-        /// Задать описание оружия
-        /// </summary>
-        /// <param name="weaponDesc">Описание оружия</param>
-        public void SetDescription(WeaponScriptableObject weaponDesc)
-        {
-            _weaponDescription = weaponDesc;
-        }
-
-        /// <summary>
-        /// Получить описание оружия
-        /// </summary>
-        /// <returns>Описание оружия</returns>
-        public WeaponScriptableObject GetDescription()
-        {
-            return _weaponDescription;
         }
 
         private void OnCollisionEnter(Collision collision)

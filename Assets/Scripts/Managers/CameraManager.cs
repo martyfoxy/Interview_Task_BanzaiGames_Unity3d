@@ -29,7 +29,7 @@ namespace Assets.Scripts.Managers
 
             _camera = Camera.main;
 
-            PlayerSpawnedEvent.OnGameEvent += FollowCamera;
+            PlayerSpawnedEvent.OnTransformEvent += PlayerTransformHandler;
         }
 
         public void OnFixedUpdate()
@@ -45,12 +45,15 @@ namespace Assets.Scripts.Managers
 
         private void OnDisable()
         {
-            PlayerSpawnedEvent.OnGameEvent -= FollowCamera;
+            PlayerSpawnedEvent.OnTransformEvent -= PlayerTransformHandler;
         }
 
-        public void FollowCamera()
+        /// <summary>
+        /// Обработчик события создания игрока, в качестве аргумента передает Transform
+        /// </summary>
+        private void PlayerTransformHandler(TransformArgs args)
         {
-            _target = ManagerContainer.Get<SpawnManager>().TankReference.transform;
+            _target = args.TransformArg;
         }
     }
 }

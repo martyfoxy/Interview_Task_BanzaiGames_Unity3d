@@ -23,6 +23,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 9094009511398482965, guid: ebc8ef3e1eaa76c44aacba4e5ec67bf4,
     type: 3}
   WeaponChangedEvent: {fileID: 11400000, guid: a98e269e78c178745881a9d346581ab6, type: 2}
+  PlayerSpawnedEvent: {fileID: 11400000, guid: b05296ca903f8e64a9a61038369b40e0, type: 2}
   NextWeaponButtonEvent: {fileID: 11400000, guid: 0471d97dd90c5164391e39ec69e06c25,
     type: 2}
   PreviosWeaponButtonEvent: {fileID: 11400000, guid: 7e983e116424c6b4182a85bbdc554873,

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyColor: {r: 0, g: 1, b: 0.16342616, a: 0}
   enemyName: "\u0421\u043B\u0430\u0431\u044B\u0439 \u043F\u0440\u043E\u0442\u0438\u0432\u043D\u0438\u043A"
-  health: 100
+  health: 50
   damage: 5
   defence: 0.5
-  speed: 2
+  speed: 4
